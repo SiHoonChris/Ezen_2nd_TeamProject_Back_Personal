@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ezen.project.IGSJ.category">
+
+	<!-- 카테고리 정보 가져오기(대분류, 중분류, 카테고리명) -->
+	<select id="getCategoryInfos" parameterType="INT" resultType="ezen.project.IGSJ.category.domain.CategoryDTO">
+		<![CDATA[
+			SELECT      ctg1.*, ctg2.category_name big_ctg
+			FROM        CategoryDTO ctg1
+			INNER JOIN  CategoryDTO ctg2
+			ON          ctg1.category_level=ctg2.cno
+			WHERE       ctg1.cno=#{num}  OR  ctg2.cno=#{num};
+		]]>
+	</select>
+
+
+</mapper>

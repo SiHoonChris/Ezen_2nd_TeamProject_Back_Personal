@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ezen.project.IGSJ.product">
+
+	<!-- 카테고리 넘버에 따른 상품 추출 -->
+	<select id="getProductList" parameterType="INT" resultType="ezen.project.IGSJ.product.domain.ProductDTO">
+		<![CDATA[
+			SELECT      prd.*, prd_img.storedThumbNailName thumb, ctg.category_level big_ctg
+			FROM        ProductDTO prd 
+			INNER JOIN  ProductFileDTO prd_img
+			ON          prd.pno=prd_img.pno 
+			INNER JOIN  CategoryDTO ctg
+			ON          prd.cno=ctg.cno
+			WHERE       prd.cno=#{num} OR ctg.category_level=#{num};
+		]]>
+	</select>
+
+
+</mapper>

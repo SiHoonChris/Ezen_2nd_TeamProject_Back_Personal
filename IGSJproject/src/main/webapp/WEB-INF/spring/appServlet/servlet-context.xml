@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:c="http://www.springframework.org/schema/c" xmlns:p="http://www.springframework.org/schema/p" xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing 
+		infrastructure -->
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
+		in the /WEB-INF/views directory -->
+	<beans:bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<context:component-scan base-package="ezen.project.IGSJ"/>
+	<context:component-scan base-package="ezen.project.IGSJ.category"/>
+	<context:component-scan base-package="ezen.project.IGSJ.product"/>
+	<context:component-scan base-package="ezen.project.IGSJ.member"/>
+	<context:component-scan base-package="ezen.project.IGSJ.address"/>
+	
+	<!-- 파일 업로드 -->
+	<!-- 파일 업로드 경로 -->
+	<beans:bean class="java.lang.String" id="uploadPath"> <!-- uploadPath라는 id, class=String은 생성자의 매개변수가 String이라는 의미 -->
+		<beans:constructor-arg value="D:\jsp\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp8\wtpwebapps\Mgsjproject\resources"></beans:constructor-arg>
+	</beans:bean>
+	
+	<!-- 일반 파일 업로드 경로 -->
+	<resources mapping="/imgUpload/**" location="/resources/imgUpload/"/> <!-- <=/imgUpload/~ 를 통해 들어오면 location으로 저장 -->
+	<beans:bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
+		<beans:property name="maxUploadSize" value="15485760"></beans:property>
+	</beans:bean>
+	<!-- 파일 업로드 끝 -->
+	
+	<!-- 인터셉터 경로 및 객체생성-->
+	<!-- 로깅 -->
+	<!-- <context:component-scan base-package="com.project.interceptor"></context:component-scan>
+	<beans:bean id="LoggerInterceptor" class="com.project.interceptor.LoggerInterceptor"></beans:bean>
+	
+	관리자 인증
+	<context:component-scan base-package="com.project.interceptor"></context:component-scan>
+	<beans:bean id="AdminVerifyInterceptor" class="com.project.interceptor.AdminVerifyInterceptor"></beans:bean>
+	
+	로그인 확인
+	<context:component-scan base-package="com.project.interceptor"></context:component-scan>
+	<beans:bean id="LoginInterceptor" class="com.project.interceptor.LoginInterceptor"></beans:bean>
+	
+	상품판매자
+	<context:component-scan base-package="com.project.interceptor"></context:component-scan>
+	<beans:bean id="SellerInterceptor" class="com.project.interceptor.SellerInterceptor"></beans:bean>
+	
+	인터셉터 세부 설정
+	<interceptors>
+		로깅
+		<interceptor>
+			<mapping path="/**"/>
+			<exclude-mapping path="/resources/**"/>
+			<exclude-mapping path="/imgUpload/**"/>
+			<beans:ref bean="LoggerInterceptor"/>
+		</interceptor>
+		관리자 인증
+		<interceptor>
+			<mapping path="/admin/**"/>
+			<exclude-mapping path="/admin/boardView*"/>
+			<beans:ref bean="AdminVerifyInterceptor"/>
+		</interceptor>
+		로그인 확인
+		<interceptor>
+			<mapping path="/cart/**"/>
+			<mapping path="/reply/**"/>
+			<mapping path="/inquire/**"/>
+			<mapping path="/order/**"/>
+			<mapping path="/payment/**"/>
+			<mapping path="/category/**"/>
+			<mapping path="/review/**"/>
+			<exclude-mapping path="/product/productView*"/>
+			<exclude-mapping path="/category/categoryPro*"/>
+			<beans:ref bean="LoginInterceptor"/>
+		</interceptor>
+		상품판매자
+		<interceptor>
+			<mapping path="/product/**"/>
+			<exclude-mapping path="/product/productView*"/>
+			<beans:ref bean="SellerInterceptor"/>
+		</interceptor>
+	</interceptors> -->
+	
+</beans:beans>
