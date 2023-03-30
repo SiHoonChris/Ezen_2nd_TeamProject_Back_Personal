@@ -2,8 +2,7 @@
 <!DOCTYPE mapper
       PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
-<mapper namespace="ezen.project.IGSJ.product">
+<mapper namespace="mappers.productMapper">
 
 	<!-- 카테고리 넘버에 따른 상품 추출 -->
 	<select id="getProductList" parameterType="INT" resultType="ezen.project.IGSJ.product.domain.ProductDTO">
@@ -18,5 +17,29 @@
 		]]>
 	</select>
 
+	<!-- 검색어에 따른 상품 추출 -->
+	<!-- MyBatis에서 작성해야 하므로 쿼리문 작성이 약간 달라짐 -->
+	<select id="getProducts" parameterType="String" resultType="ezen.project.IGSJ.product.domain.ProductDTO">
+		<![CDATA[
+			SELECT      prd.*, prd_img.storedThumbNailName thumb, ctg.category_level big_ctg
+			FROM        ProductDTO prd 
+			INNER JOIN  ProductFileDTO prd_img
+			ON          prd.pno=prd_img.pno 
+			INNER JOIN  CategoryDTO ctg
+			ON          prd.cno=ctg.cno
+			WHERE       prd.product_name LIKE CONCAT('%', #{product_name}, '%');
+		]]>
+	</select>
+
+	<!-- 선택된 상품에 대한 정보 -->
+	<select id="getProductInfo" parameterType="ezen.project.IGSJ.product.domain.ProductDTO" resultType="ezen.project.IGSJ.product.domain.ProductDTO">
+		<![CDATA[
+			SELECT      prd.*, prdf.storedFileRootName image
+			FROM        ProductDTO prd
+			INNER JOIN  ProductFileDTO prdf
+			ON          prd.pno = prdf.pno
+			WHERE       prd.pno = #{pno};
+		]]>
+	</select>
 
 </mapper>

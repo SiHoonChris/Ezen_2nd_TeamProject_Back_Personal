@@ -14,12 +14,13 @@ public class ProductDTO {
 	private String product_description;
 	private Date   product_regDate;
 	private String thumb;
+	private String image;
 	
 	public ProductDTO() {}
 	public ProductDTO
 	(String pno, int cno, String product_name, int product_price, 
 	 int product_stock, String product_description, Date product_regDate,
-	 String thumb) {
+	 String thumb, String image) {
 		this.pno                 = pno;
 		this.cno                 = cno;
 		this.product_name        = product_name;
@@ -28,6 +29,7 @@ public class ProductDTO {
 		this.product_description = product_description;
 		this.product_regDate     = product_regDate;
 		this.thumb               = thumb;
+		this.image               = image;
 	}
 	
 	public String getPno()                                           {return pno;}
@@ -43,15 +45,17 @@ public class ProductDTO {
 	public String getProduct_description()                           {return product_description;}
 	public void   setProduct_description(String product_description) {this.product_description = product_description;}
 	public Date   getProduct_regDate()                               {return product_regDate;}
-	public void setProduct_regDate(Date product_regDate)             {this.product_regDate = product_regDate;}
+	public void   setProduct_regDate(Date product_regDate)           {this.product_regDate = product_regDate;}
 	public String getThumb()                                         {return thumb;}
-	public void setThumb(String thumb)                               {this.thumb = thumb;}
+	public void   setThumb(String thumb)                             {this.thumb = thumb;}
+	public String getImage()                                         {return image;}
+	public void   setImage(String image)                             {this.image = image;}
 	
 	@Override
 	public String toString() {
 		return "ProductDTO [pno=" + pno + ", cno=" + cno + ", product_name=" + product_name + ", product_price="
 				+ product_price + ", product_stock=" + product_stock + ", product_description=" + product_description
-				+ ", product_regDate=" + product_regDate + ", thumb=" + thumb + "]";
+				+ ", product_regDate=" + product_regDate + ", thumb=" + thumb + ", image=" + image + "]";
 	}
 	
 	
