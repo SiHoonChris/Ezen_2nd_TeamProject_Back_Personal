@@ -13,7 +13,6 @@ public class ProductDTO {
 	private int    product_stock;
 	private String product_description;
 	private Date   product_regDate;
-	private String thumb;
 	private String image;
 	
 	public ProductDTO() {}
@@ -28,7 +27,6 @@ public class ProductDTO {
 		this.product_stock       = product_stock;
 		this.product_description = product_description;
 		this.product_regDate     = product_regDate;
-		this.thumb               = thumb;
 		this.image               = image;
 	}
 	
@@ -46,8 +44,6 @@ public class ProductDTO {
 	public void   setProduct_description(String product_description) {this.product_description = product_description;}
 	public Date   getProduct_regDate()                               {return product_regDate;}
 	public void   setProduct_regDate(Date product_regDate)           {this.product_regDate = product_regDate;}
-	public String getThumb()                                         {return thumb;}
-	public void   setThumb(String thumb)                             {this.thumb = thumb;}
 	public String getImage()                                         {return image;}
 	public void   setImage(String image)                             {this.image = image;}
 	
@@ -55,7 +51,7 @@ public class ProductDTO {
 	public String toString() {
 		return "ProductDTO [pno=" + pno + ", cno=" + cno + ", product_name=" + product_name + ", product_price="
 				+ product_price + ", product_stock=" + product_stock + ", product_description=" + product_description
-				+ ", product_regDate=" + product_regDate + ", thumb=" + thumb + ", image=" + image + "]";
+				+ ", product_regDate=" + product_regDate + ", image=" + image + "]";
 	}
 	
 	

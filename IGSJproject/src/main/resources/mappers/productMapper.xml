@@ -7,7 +7,7 @@
 	<!-- 카테고리 넘버에 따른 상품 추출 -->
 	<select id="getProductList" parameterType="INT" resultType="ezen.project.IGSJ.product.domain.ProductDTO">
 		<![CDATA[
-			SELECT      prd.*, prd_img.storedThumbNailName thumb, ctg.category_level big_ctg
+			SELECT      prd.*, prd_img.storedFileRootName image, ctg.category_level big_ctg
 			FROM        ProductDTO prd 
 			INNER JOIN  ProductFileDTO prd_img
 			ON          prd.pno=prd_img.pno 
@@ -21,7 +21,7 @@
 	<!-- MyBatis에서 작성해야 하므로 쿼리문 작성이 약간 달라짐 -->
 	<select id="getProducts" parameterType="String" resultType="ezen.project.IGSJ.product.domain.ProductDTO">
 		<![CDATA[
-			SELECT      prd.*, prd_img.storedThumbNailName thumb, ctg.category_level big_ctg
+			SELECT      prd.*, prd_img.storedFileRootName image, ctg.category_level big_ctg
 			FROM        ProductDTO prd 
 			INNER JOIN  ProductFileDTO prd_img
 			ON          prd.pno=prd_img.pno 
