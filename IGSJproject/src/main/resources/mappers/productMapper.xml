@@ -41,5 +41,28 @@
 			WHERE       prd.pno = #{pno};
 		]]>
 	</select>
+	
+	<!-- 상품 주문량 상위 10개로 수정 필요 -->
+	<select id="allProductInfo" resultType="ezen.project.IGSJ.product.domain.ProductDTO">
+		<![CDATA[
+			SELECT      prd.*, prdf.storedFileRootName image
+			FROM        ProductDTO prd
+			INNER JOIN  ProductFileDTO prdf
+			ON          prd.pno = prdf.pno
+			LIMIT       10;
+		]]>
+	</select>
+	
+	<!-- 신상품 10개 추출 -->
+	<select id="newProductInfo" resultType="ezen.project.IGSJ.product.domain.ProductDTO">
+		<![CDATA[
+			SELECT      prd.*, prdf.storedFileRootName image
+			FROM        ProductDTO prd
+			INNER JOIN  ProductFileDTO prdf
+			ON          prd.pno = prdf.pno
+            ORDER BY    product_regDate
+			LIMIT       10;
+		]]>
+	</select>
 
 </mapper>

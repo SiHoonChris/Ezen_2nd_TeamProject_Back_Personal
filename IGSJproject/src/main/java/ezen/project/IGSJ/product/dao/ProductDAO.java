@@ -16,4 +16,10 @@ public interface ProductDAO {
 	// 선택된 상품에 대한 정보
 	public ProductDTO getProductInfo(String pno) throws Exception;	
 	
+	// 모든 상품 => 주문량 상위 10종목으로 수정하기
+	public List<ProductDTO> allProductInfo() throws Exception;
+
+	// 신상품 10개 추출
+	public List<ProductDTO> newProductInfo() throws Exception;
+	
 } // public interface ProductDao

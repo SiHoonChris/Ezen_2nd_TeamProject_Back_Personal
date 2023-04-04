@@ -52,4 +52,19 @@ public class ProductController {
 		return productService.getProductInfo(pno);
 	} // getProducts 
 	
+	// 모든 상품에 대한 정보(테스터) => 주문량 상위 10종목으로 수정하기
+	@GetMapping("/all")
+	@ResponseBody
+	public List<ProductDTO> allProductInfo() throws Exception {
+		return productService.allProductInfo();
+	} // allProductInfo
+	
+	// 신상품 10개 추출
+	@GetMapping("/brandnew")
+	@ResponseBody
+	public List<ProductDTO> newProductInfo() throws Exception {
+		return productService.newProductInfo();
+	} // newProductInfo
+	
+	
 } // public class ProductController
