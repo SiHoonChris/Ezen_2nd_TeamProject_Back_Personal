@@ -8,6 +8,18 @@
 		FROM   MemberDTO 
 		WHERE  userId = #{userId} AND userPwd = #{userPwd} 
 	</select>
-
+	
+	<!-- 회원가입 여부 확인 & 회원일 경우 로그인 (카카오) -->
+	<select id="KakaoSignedMemberCheck" parameterType="ezen.project.IGSJ.member.domain.MemberDTO" resultType = "ezen.project.IGSJ.member.domain.MemberDTO">
+		SELECT * 
+		FROM   MemberDTO 
+		WHERE  userId = #{userId}  AND  userEmail = #{userEmail}  AND  userJoinDate = #{userJoinDate} ; 
+	</select>
+	
+	<!-- 회원가입 가입 (카카오) -->
+	<insert id="KakaoSignUp" parameterType="ezen.project.IGSJ.member.domain.MemberDTO">
+		INSERT INTO   MemberDTO 
+		VALUES        (#{userId}, #{userPwd}, #{userName}, #{userPhoneNumber}, #{userEmail}, #{userJoinDate}, #{userVerify}, #{userBirth});
+	</insert>
 
 </mapper>

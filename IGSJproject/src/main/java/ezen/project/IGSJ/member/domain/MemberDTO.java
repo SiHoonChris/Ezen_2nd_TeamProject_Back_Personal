@@ -40,7 +40,7 @@ public class MemberDTO {
 	public Date   getUserJoinDate()                          {return userJoinDate;}
 	public void   setUserJoinDate(Date userJoinDate)         {this.userJoinDate = userJoinDate;}
 	public int    getUserVerify()                            {return userVerify;}
-	public void   etUserVerify(int userVerify)               {this.userVerify = userVerify;}
+	public void   setUserVerify(int userVerify)              {this.userVerify = userVerify;}
 	public String getUserBirth()                             {return userBirth;}
 	public void   setUserBirth(String userBirth)             {this.userBirth = userBirth;}
 

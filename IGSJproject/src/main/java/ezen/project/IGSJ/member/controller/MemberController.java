@@ -1,10 +1,14 @@
 package ezen.project.IGSJ.member.controller;
 
 
-import org.json.simple.JSONArray;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -43,9 +48,11 @@ public class MemberController {
 		return memberService.memberLogin(memberDTO);
 	} // memberLogin()
 	
+	
 	// 카카오API 활용한 로그인 구현
-	@GetMapping("/KAKAOlogin")
-	public @ResponseBody String KakaoLogin(String code) throws ParseException {
+	@GetMapping("/kakao-login")
+	@ResponseBody
+	public MemberDTO KakaoLogin(@RequestParam String code) throws Exception {
 		// 1. 발급된 인가코드로 Access_Token 생성
 		RestTemplate rt = new RestTemplate();
 		
@@ -55,7 +62,7 @@ public class MemberController {
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("grant_type", "authorization_code");
 		params.add("client_id", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-		params.add("redirect_uri", "http://localhost:8086/member/KAKAOlogin");
+		params.add("redirect_uri", "http://localhost:8080/login");
 		params.add("code", code);
 		
 		HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
@@ -89,31 +96,47 @@ public class MemberController {
 		);
 
 		// 3. 추출된 사용자 정보 가공
-		JSONParser parser     = new JSONParser();
-		JSONObject jsonObject = (JSONObject) parser.parse(response2.getBody());
-//		JSONArray  jsonArr    = (JSONArray)jsonObject.get("properties");
+		JSONParser parser               = new JSONParser();
+		JSONObject jsonObject           = (JSONObject) parser.parse(response2.getBody());
+		String     propertiesObject     = jsonObject.get("properties").toString();
+		JSONObject nameObj              = (JSONObject) parser.parse(propertiesObject);
+		String     kakao_accountObject  = jsonObject.get("kakao_account").toString();
+		JSONObject kakao_accountObj     = (JSONObject) parser.parse(kakao_accountObject);
 		
-		System.out.println("userId          : "+jsonObject.get("id")); // java.lang.Long
-		System.out.println("userPwd         : 없음");
-		System.out.println("userName        : "+jsonObject.get("properties")); // org.json.simple.JSONObject
-		System.out.println("userPhoneNumber : 없음");
-		System.out.println("userEmail       : "+jsonObject.get("kakao_account")); // org.json.simple.JSONObject
-		System.out.println("userJoinDate    : "+jsonObject.get("connected_at"));  // java.lang.String
-		System.out.println("userVerify      : 사용자");
-		System.out.println("userBirth       : 없음");
-
-//		*** 출력 결과 ***
-//		userId          : 2736576636
-//		userPwd         : 없음
-//		userName        : {"nickname":"이시훈"}
-//		userPhoneNumber : 없음
-//		userEmail       : {"email_needs_agreement":false,"profile_nickname_needs_agreement":false,"profile":{"nickname":"이시훈"},"is_email_valid":true,"is_email_verified":true,"has_email":true,"email":"hoonee26@naver.com"}
-//		userJoinDate    : 2023-04-05T09:03:18Z
-//		userVerify      : 사용자
-//		userBirth       : 없음
+		String userId                   = jsonObject.get("id").toString();
+		String userPwd                  = jsonObject.get("id").toString();
+		String userName                 = nameObj.get("nickname").toString();
+		String userPhoneNumber          = "000-0000-0000";
+		String userEmail                = kakao_accountObj.get("email").toString();
+		String userJoinDateStr          = Instant.parse((CharSequence) jsonObject.get("connected_at")).atOffset( ZoneOffset.UTC )
+				                          .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		java.util.Date userJoinDateUtil = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(userJoinDateStr);
+		Date userJoinDateSql            = new Date(userJoinDateUtil.getTime());
+		int    userVerify               = 0;
+		String userBirth                = "0000-00-00";
+				
+//		System.out.println("userId          : " + userId);
+//		System.out.println("userPwd         : " + userPwd);
+//		System.out.println("userName        : " + userName);
+//		System.out.println("userPhoneNumber : " + userPhoneNumber);
+//		System.out.println("userEmail       : " + userEmail);
+//		System.out.println("userJoinDate    : " + userJoinDateSql.toString());
+//		System.out.println("userVerify      : " + userVerify);
+//		System.out.println("userBirth       : " + userBirth);
 		
-		return response2.getBody();
-		
+		// 4. DB로 정보 전송(회원가입/로그인 로직 실행)
+		MemberDTO memberDTO = new MemberDTO();
+		memberDTO.setUserId(userId);
+		memberDTO.setUserPwd(userPwd);
+		memberDTO.setUserPhoneNumber(userPhoneNumber);
+		memberDTO.setUserName(userName);
+		memberDTO.setUserEmail(userEmail);
+		memberDTO.setUserJoinDate(userJoinDateSql);
+		memberDTO.setUserVerify(userVerify);
+		memberDTO.setUserBirth(userBirth);
+	    
+	    return memberService.KakaoLogin(memberDTO);
+	    
 	} // KakaoLogin()
 
 		

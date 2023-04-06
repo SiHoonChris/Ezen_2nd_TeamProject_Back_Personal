@@ -53,6 +53,18 @@
 		]]>
 	</select>
 	
+	<!-- 상품 주문량 상위 10개 -->
+	<!-- <select id="TopOrderedProductInfo" resultType="ezen.project.IGSJ.product.domain.ProductDTO">
+		<![CDATA[
+			SELECT      Cond.productCnt, prd.*, prdf.storedFileRootName image
+			FROM        ProductDTO prd
+			INNER JOIN  (SELECT pno, SUM(productCnt) productCnt FROM OrderDetailDTO GROUP BY pno ORDER BY productCnt DESC LIMIT 0, 10) Cond
+			ON          Cond.pno=prd.pno
+			INNER JOIN  ProductFileDTO prdf
+			ON          prd.pno = prdf.pno;
+		]]>
+	</select>-->
+	
 	<!-- 신상품 10개 추출 -->
 	<select id="newProductInfo" resultType="ezen.project.IGSJ.product.domain.ProductDTO">
 		<![CDATA[
