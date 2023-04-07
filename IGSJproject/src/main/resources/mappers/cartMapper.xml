@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.cartMapper">
+
+	<!-- 장바구니 등록 -->
+	<insert id = "cartWrite" parameterType = "ezen.project.IGSJ.product.domain.ProductDTO">
+		INSERT INTO  CartDTO
+		VALUES       (#{cartNum}, #{userId}, #{pno}, #{productCnt}, #{size})
+	</insert>
+	
+	<!-- 장바구니 목록 -->
+	<select id = "cartList" parameterType = "String" resultType = "ezen.project.IGSJ.cart.domain.CartDTO">
+		SELECT     ct.cartNum, ct.userId, ct.pno, CONCAT(prd.product_name, " (", ct.size, ")") product_name, prd.product_price, ct.productCnt
+		FROM       CartDTO ct
+		INNER JOIN ProductDTO prd
+		ON         ct.pno = prd.pno
+		WHERE      ct.userId = #{userId};
+	</select>
+	
+	<!-- 장바구니 삭제 -->
+	<delete id = "cartDelete" parameterType = "ezen.project.IGSJ.cart.domain.CartDTO">
+		DELETE FROM  CartDTO
+		WHERE        userId = #{userId}
+		AND          pno = #{pno};
+	</delete>
+
+</mapper>
