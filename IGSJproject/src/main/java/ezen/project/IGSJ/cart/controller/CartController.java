@@ -32,12 +32,12 @@ public class CartController {
 	@ResponseBody
 	@PostMapping("/cartWrite")
 	public boolean cartWrite(@RequestBody CartDTO cartDTO) throws Exception{
-		// 1) List<CartDTO> 생성
+		// 0) ProductDetail.vue에서 '장바구니' 버튼 실행 내용 받기(받아서 List<CartDTO>로 가공)
 		JSONParser parser       = new JSONParser();
 		JSONObject sizeAndCount = (JSONObject) parser.parse(cartDTO.getSize());
 		String     userId       = cartDTO.getUserId();
 		String     pno          = cartDTO.getPno();
-				
+		
 		Set<String> sizes = sizeAndCount.keySet();
 		String[] sizeArr = new String[sizes.size()];
 		int n = 0;
@@ -46,15 +46,19 @@ public class CartController {
 		List<CartDTO> prdToCart = new ArrayList<>(sizeArr.length);
 		for(int i=0; i<sizeArr.length; i++) {
 			String rs = RandomStringUtils.randomNumeric(6);
-			String cartNum = userId + "_" + rs;			
+			String cartNum = userId + "_" + rs;
 			String size = sizeArr[i];
 			int productCnt = Integer.parseInt(sizeAndCount.get(size).toString());			
 			if(productCnt != 0) {prdToCart.add(new CartDTO(cartNum, userId, pno, productCnt, size));}
 		}
 		
-		// 2) List<CartDTO>를 파라미터로 받는 메서드(CartService) 실행	
+		// CartDAOImpl.java 에서...
+		// 1) cartSelect(장바구니 내 중복 내용 확인) 실행
+		// 2) 있으면 cartUpdate(장바구니 내 상품 수량 증가) 실행
+		// 3) 없으면 cartWrite(장바구니 내 새 상품 등록) 실행
 		return cartService.cartWrite(prdToCart)==0 ? false : true;
 	} // cartWrite()
+	
 	
 	// 장바구니 목록
 	@ResponseBody
@@ -72,22 +76,7 @@ public class CartController {
 		if(cartDelete == 1) {return true;}
 		else {return false;}
 	} // cartDelete()
+
 	
 } // public class CartController
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -3,11 +3,35 @@
 
 <mapper namespace="mappers.cartMapper">
 
+	<!-- cartWrite(DAO)에서 사용되는 쿼리문 : cartSelect, cartUpdate, cartWrite -->
+	
+	<!-- 장바구니 중복 확인 -->
+	<select id="cartSelect" parameterType="ezen.project.IGSJ.cart.domain.CartDTO" resultType="int">
+		SELECT  COUNT(*) 
+		FROM    CartDTO 
+		WHERE   userId = #{userId} 
+		AND     pno    = #{pno} 
+		AND     size   = #{size}; 
+	</select>
+
+	<!-- 장바구니 중복 수량 증가 -->
+	<update id="cartUpdate" parameterType="ezen.project.IGSJ.cart.domain.CartDTO">
+		UPDATE  CartDTO 
+		SET     productCnt = productCnt + #{productCnt} 
+		WHERE   userId = #{userId} 
+		AND     pno    = #{pno} 
+		AND     size   = #{size}; 
+	</update>
+		
 	<!-- 장바구니 등록 -->
-	<insert id = "cartWrite" parameterType = "ezen.project.IGSJ.product.domain.ProductDTO">
+	<insert id="cartWrite" parameterType="ezen.project.IGSJ.product.domain.ProductDTO">
 		INSERT INTO  CartDTO
 		VALUES       (#{cartNum}, #{userId}, #{pno}, #{productCnt}, #{size})
 	</insert>
+	
+		
+
+
 	
 	<!-- 장바구니 목록 -->
 	<select id = "cartList" parameterType = "String" resultType = "ezen.project.IGSJ.cart.domain.CartDTO">
